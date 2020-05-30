@@ -1,8 +1,5 @@
 package swu.xl.requesthtml;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -11,12 +8,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 获取URL
-     * @return
+     * @return 返回一个URL
      */
     private URL getURL(String urlString){
         try {
@@ -91,13 +91,14 @@ public class MainActivity extends AppCompatActivity {
             //响应成功
             if (responseCode == HttpURLConnection.HTTP_OK){
                 //响应流
-                InputStream inputStream = connection.getInputStream();
+                InputStream is = connection.getInputStream();
 
                 //转化为字符串
-                InputStreamReader reader = new InputStreamReader(inputStream, "UTF-8");
+                InputStreamReader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
                 char[] buffer = new char[1024];
                 reader.read(buffer);
                 String content = new String(buffer);
+                is.close();
                 return content;
             }
 
